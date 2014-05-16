@@ -368,7 +368,7 @@ describe('extend', function() {
 
     expect('a' in extended && 'b' in extended).to.be(true);
   });
-});
+  });
 
 describe('defaults', function() {
   var options;
@@ -427,8 +427,10 @@ describe('once', function() {
     var increment = _.once(function() {
       num += 1;
     });
-
+    
+    console.log("calling one time");
     increment();
+    console.log("calling two time");
     increment();
 
     expect(num).to.equal(1);

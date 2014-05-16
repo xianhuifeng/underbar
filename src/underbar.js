@@ -131,7 +131,6 @@ var _ = {};
   // Calls the method named by methodName on each value in the list.
   // Note: you will nead to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
-    console.log('get called ')
     if(typeof functionOrKey === 'function'){
       return _.map(collection, function(value){
         return functionOrKey.call(value);
@@ -182,8 +181,11 @@ var _ = {};
     //   return item === target;
     // }, false);
 
-    _.reduce(collection, function(){
-      
+   return  _.reduce(collection, function(found, value){
+      if(found){
+         return found;
+      }
+      return value === target;
     },false);
   };
 
@@ -191,12 +193,29 @@ var _ = {};
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    if(!collection.length){return true;}
+    if(iterator === undefined){iterator = _.identity;}
+    return _.reduce(collection, function(pass, value){
+      if(!pass){
+        return false;
+      }
+      return !!iterator(value);
+    }, true);
+
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    if(!collection.length){return false;}
+    if(iterator === undefined){iterator = _.identity;}
+    return _.reduce(collection, function(pass, value){
+      if(pass){
+        return true;
+      }
+      return !!iterator(value);
+    }, false);
   };
 
 
@@ -219,11 +238,27 @@ var _ = {};
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    //type of arguments are object
+    var args = Array.prototype.slice.call(arguments, 1);
+    //in each args, and in each object
+    for (var i = 0; i < args.length; i++) {
+     _.each(args[i], function(value, key){
+      obj[key] = value; 
+     }); 
+    }return obj;
+
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    for (var i = 0; i < args.length; i++) {
+     _.each(args[i], function(value, key){
+      if(!_.contains(Object.keys(obj), key)){ obj[key] = value;}
+      }); 
+    }
+    return obj;
   };
 
 
@@ -265,6 +300,20 @@ var _ = {};
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var result;
+    var args;
+    return function(){
+      //if get called with same argument
+      if(args === arguments){
+        //reSturn stored result
+        return result;
+      }else{
+        result = func.apply(this, arguments);
+
+      }
+      
+      //call and store and return result
+    };
   };
 
   // Delays a function for the given number of milliseconds, and then calls
