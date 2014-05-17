@@ -498,8 +498,8 @@ describe('delay', function() {
     expect(callback.notCalled).to.be(true);
 
     clock.tick(1);
-
-    expect(callback.calledOnce).to.be(true);
+      //console.log(callback.calledOnce)
+    expect(callback.calledOnce).to.be(true);  
   });
 
   it('should have successfully passed function arguments in', function() {
@@ -507,7 +507,7 @@ describe('delay', function() {
 
     _.delay(callback, 100, 1, 2);
     clock.tick(100);
-
+//console.log(callback())
     expect(callback.calledWith(1, 2)).to.be(true);
   });
 });

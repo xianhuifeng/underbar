@@ -303,19 +303,19 @@ var _ = {};
     var result;
     var args;
     return function(){
-      //if get called with same argument
-      if(args === arguments){
-        //reSturn stored result
-        return result;
-      }else{
-        result = func.apply(this, arguments);
-
+     // console.log(args +'and '+arguments)
+     //console.log(args)
+      if(args !== arguments){
+        //console.log('different arguments',args, arguments);
+        args = arguments;
+        return result = func.apply(this, arguments);
+      }else if(args === arguments){
+       // console.log("same arguments", args, arguments);
+      return result;
+        
       }
-      
-      //call and store and return result
     };
-  };
-
+   };
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
   //
@@ -323,6 +323,11 @@ var _ = {};
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = Array.prototype.slice.call(arguments, 2);
+    setTimeout(function(){
+      func(args);
+      //console.log(func(args));
+    }, wait);
   };
 
 
@@ -337,6 +342,27 @@ var _ = {};
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    //make newArray and helperArray
+    var newArray = [];
+    var helperArray = [0,1,2];
+    var newIndex;
+    var n = 3;
+    //copy array
+    var copy = array.slice();
+    //create randomHelper function
+    var randomHelper = function(helperArray){
+      if (n === 1){ranNum = 0;}
+      else{
+        var ranNum = Math.floor(Math.random()* n--);
+      }
+      return helperArray.splice(ranNum,1);
+    };
+    //random array
+    for (var i = 0; i < copy.length; i++) {
+      newIndex = randomHelper(helperArray);
+      newArray[newIndex] = copy[i];
+    }
+    return newArray;
   };
 
 
