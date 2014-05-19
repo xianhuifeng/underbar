@@ -312,7 +312,6 @@ var _ = {};
           return resultStorage[i][1];
         }
       }
-        //call once and save result inside storage
         var resultOnce = func.apply(this, arguments);
         var dupal =[args, resultOnce];
         resultStorage.push(dupal);
@@ -330,8 +329,9 @@ var _ = {};
   _.delay = function(func, wait) {
     var args = Array.prototype.slice.call(arguments, 2);
     setTimeout(function(){
-      func(args);
-    }, wait);
+      //*** passing array to function using apply
+      func.apply(this, args);
+     }, wait);
   };
 
 
