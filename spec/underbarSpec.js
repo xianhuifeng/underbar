@@ -448,6 +448,7 @@ describe('memoize', function() {
     fastFib = _.memoize(fib);
 
     timeCheck = function(str) { return str + Date.now(); };
+    //timeCheck = function(str) { return str };
     fastTime = _.memoize(timeCheck);
 
     // Synchronous sleep: terrible for web development, awesome for testing _.memoize
@@ -458,6 +459,7 @@ describe('memoize', function() {
   });
 
   it('a memoized function should produce the same result when called with the same arguments', function() {
+
     expect(fib(10)).to.equal(55);
     expect(fastFib(10)).to.equal(55);
   });

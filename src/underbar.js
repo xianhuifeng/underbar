@@ -44,7 +44,7 @@ var _ = {};
     }else if(n === 0){
       return [];
     }else{
-      return array.slice(Math.max(0, length-n), array.length);
+      return array.slice(Math.max(0, array.length-n), array.length);
     }
   };
 
@@ -300,21 +300,26 @@ var _ = {};
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-    var result;
-    var args;
+    var resultStorage = [];
+
     return function(){
-     // console.log(args +'and '+arguments)
-     //console.log(args)
-      if(args !== arguments){
-        //console.log('different arguments',args, arguments);
-        args = arguments;
-        return result = func.apply(this, arguments);
-      }else if(args === arguments){
-       // console.log("same arguments", args, arguments);
-      return result;
-        
+
+      var argsArray = Array.prototype.slice.call(arguments);
+      var args = argsArray[0];
+
+      for (var i = 0; i < resultStorage.length; i++) {
+        if(resultStorage[i][0] === args){
+          return resultStorage[i][1];
+        }
       }
-    };
+        //call once and save result inside storage
+        var resultOnce = func.apply(this, arguments);
+        var dupal =[args, resultOnce];
+        resultStorage.push(dupal);
+        return resultOnce;
+        
+      };
+  
    };
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
@@ -326,7 +331,6 @@ var _ = {};
     var args = Array.prototype.slice.call(arguments, 2);
     setTimeout(function(){
       func(args);
-      //console.log(func(args));
     }, wait);
   };
 
